@@ -1,34 +1,36 @@
-# Character Card Maker
+# Character Card Checker
 
-A free, open-source tool for making AI character cards.
+A free, open-source tool for reading, checking and converting AI character cards.
 
-**Use it online:** https://roleplayadotcom.github.io/character-card-maker/
+**Use it online:** https://roleplayadotcom.github.io/character-card-checker/
 
-Write a character, add a picture and download it as a PNG character card or a JSON file. You can also open an existing card to edit it.
+Drop in a character card and it shows you what is inside, checks it against the V2 and V3 card specs, and lets you download it as a clean V2 or V3 JSON file.
 
-## What it makes
+## What it reads
 
-- **PNG cards** with both V2 (`chara`) and V3 (`ccv3`) data, so older and newer apps can both read them
-- **V2 JSON** (`chara_card_v2`) and **V3 JSON** (`chara_card_v3`) files
-- Cards that import straight into [RolePlaya](https://roleplaya.com) and open in SillyTavern, Chub, RisuAI, Agnaistic and most other apps that follow the spec
+- **PNG cards** with the character stored in the `chara` (V2) or `ccv3` (V3) chunk
+- **JSON cards** in V1, V2 (`chara_card_v2`) or V3 (`chara_card_v3`) format
+- Cards exported from Janitor AI, Chub, SillyTavern, RisuAI, Agnaistic and most other apps that follow the spec
 
-## Features
+## What it checks
 
-- Every standard field: name, description, personality, scenario, first message, alternate greetings, example dialogue, system prompt, post history instructions, creator notes, tags, creator and version
-- Word and estimated token counts for each field
-- Opens V1, V2 and V3 cards for editing and keeps their lorebook and extension data
-- JPG and WebP pictures are converted to PNG automatically
-- Your draft is kept in your browser if you close the page
+- Name, description, personality, scenario and first message
+- Alternate greetings, example dialogue, tags and creator
+- Lorebook (character book) entries
+- Common problems: missing first message, very short or very long descriptions, old V1 format, missing tags
 
 ## Privacy
 
-Everything runs in your browser. Nothing is uploaded anywhere.
+Everything runs in your browser. Your card is never uploaded anywhere.
+
+## Using your card
+
+Cards checked here import directly into [RolePlaya](https://roleplaya.com), the AI roleplay platform for adults (18+), along with most other card-compatible apps. See [how to import Janitor, Chub and SillyTavern cards](https://roleplaya.com/blog/import-janitor-chub-sillytavern-cards/).
 
 ## Related
 
-- [Character Card Checker](https://roleplayadotcom.github.io/character-card-checker/): read and check any card
-- [How to import character cards into RolePlaya](https://roleplaya.com/blog/import-janitor-chub-sillytavern-cards/)
+- [Character Card Maker](https://roleplayadotcom.github.io/character-card-maker/): create or edit a card and download it as PNG or JSON
 
 ## Licence
 
-MIT. Made by [RolePlaya](https://roleplaya.com).
+MIT. Free to use, copy and change.
