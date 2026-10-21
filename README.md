@@ -10,7 +10,7 @@ Write a character, add a picture and download it as a PNG character card or a JS
 
 - **PNG cards** with both V2 (`chara`) and V3 (`ccv3`) data, so older and newer apps can both read them
 - **V2 JSON** (`chara_card_v2`) and **V3 JSON** (`chara_card_v3`) files
-- Cards that open in SillyTavern, Chub, RisuAI, Agnaistic, RolePlaya and most other apps that follow the spec
+- Cards that import straight into [RolePlaya](https://roleplaya.com) and open in SillyTavern, Chub, RisuAI, Agnaistic and most other apps that follow the spec
 
 ## Features
 
