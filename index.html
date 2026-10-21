@@ -3,142 +3,149 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Character Card Checker | V2 and V3 AI character cards</title>
-<meta name="description" content="Free tool to check, read and convert AI character cards. Opens V1, V2 and V3 PNG and JSON cards from Janitor AI, Chub, SillyTavern and RisuAI in your browser. Nothing is uploaded.">
+<title>Character Card Maker | Create V2 and V3 AI character cards</title>
+<meta name="description" content="Free character card maker. Write an AI character, add a picture and download it as a V2 or V3 PNG card or JSON file for RolePlaya, SillyTavern, Chub, RisuAI and other apps. Edit existing cards too. Nothing is uploaded.">
 <style>
-:root{--bg:#0b0b0d;--panel:rgba(20,20,22,0.95);--line:rgba(255,65,180,0.3);--pink:#ff41b4;--text:#fff;--muted:rgba(255,255,255,0.62);}
+:root{--bg:#0b0b0d;--panel:rgba(20,20,22,0.95);--line:rgba(255,65,180,0.3);--pink:#ff41b4;--text:#fff;--muted:rgba(255,255,255,0.62);--field:rgba(255,255,255,0.04);}
 *{box-sizing:border-box;}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 -apple-system,Segoe UI,Inter,Roboto,sans-serif;}
-main{max-width:860px;margin:0 auto;padding:40px 16px 60px;}
+main{max-width:900px;margin:0 auto;padding:40px 16px 60px;}
 h1{font-size:30px;margin:0 0 6px;}
-.sub{color:var(--muted);margin:0 0 26px;}
-.drop{display:block;margin-top:18px;border:1px dashed var(--line);border-radius:16px;background:var(--panel);padding:38px 18px;text-align:center;cursor:pointer;transition:border-color .2s;}
+h2{font-size:18px;margin:0 0 14px;}
+.sub{color:var(--muted);margin:0 0 22px;}
+.panel{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:20px;margin-top:18px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:640px){.row{grid-template-columns:1fr;}}
+label.f{display:block;margin-bottom:14px;}
+label.f span{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:5px;}
+label.f span em{font-style:normal;}
+input[type=text],textarea{width:100%;background:var(--field);border:1px solid rgba(255,255,255,0.09);border-radius:10px;color:var(--text);padding:10px 12px;font:inherit;}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--line);}
+textarea{min-height:110px;resize:vertical;}
+textarea.big{min-height:180px;}
+input[type=file]{display:none;}
+.pick{display:flex;gap:16px;align-items:center;}
+.pick img{width:110px;height:146px;object-fit:cover;border-radius:12px;background:var(--field);}
+.pick .ph{width:110px;height:146px;border-radius:12px;border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:8px;}
+.drop{display:block;border:1px dashed var(--line);border-radius:16px;background:var(--panel);padding:22px 18px;text-align:center;cursor:pointer;margin-top:18px;}
 .drop.on{border-color:var(--pink);}
 .drop b{color:var(--pink);}
-.drop small{display:block;color:var(--muted);margin-top:6px;}
-input[type=file]{display:none;}
-.card{margin-top:22px;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:20px;display:none;}
-.head{display:flex;gap:16px;align-items:center;margin-bottom:14px;}
-.head img{width:84px;height:84px;object-fit:cover;border-radius:12px;}
-.head h2{margin:0;font-size:22px;}
-.chip{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,65,180,0.15);color:var(--pink);font-size:12px;font-weight:700;margin-right:6px;}
-table{width:100%;border-collapse:collapse;margin-top:8px;}
-td{padding:8px 6px;border-top:1px solid rgba(255,255,255,0.07);vertical-align:top;}
-td:first-child{color:var(--muted);width:38%;}
-.warn{margin-top:14px;padding:12px 14px;border-radius:12px;background:rgba(255,65,180,0.08);color:var(--muted);}
-.warn li{margin:3px 0;}
-.btns{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+.drop small{display:block;color:var(--muted);margin-top:4px;}
+.greet{position:relative;}
+.greet button.x{position:absolute;top:28px;right:8px;padding:4px 10px;font-size:12px;}
 button{border:0;border-radius:12px;padding:11px 18px;background:rgba(255,65,180,0.15);color:var(--pink);font-weight:700;cursor:pointer;font-size:14px;}
 button:hover{background:rgba(255,65,180,0.25);}
-.err{color:var(--pink);margin-top:14px;}
+button.ghost{background:transparent;}
+.btns{display:flex;gap:10px;flex-wrap:wrap;}
+.note{color:var(--muted);font-size:13px;margin-top:10px;}
+.err{color:var(--pink);margin-top:10px;}
+.total{color:var(--muted);font-size:13px;margin-bottom:12px;}
 footer{margin-top:36px;color:var(--muted);font-size:13px;}
 footer a{color:var(--pink);}
 </style>
 </head>
 <body>
 <main>
-<h1>Character Card Checker</h1>
-<p class="sub">Open any AI character card to see what is inside it, check it against the V2 and V3 specs, and convert it. Works with PNG and JSON cards from Janitor AI, Chub, SillyTavern, RisuAI and others, all of which import straight into <a href="https://roleplaya.com" style="color:var(--pink)">RolePlaya</a>. Everything happens in your browser; nothing is uploaded.</p>
+<h1>Character Card Maker</h1>
+<p class="sub">Write an AI character, add a picture and download it as a PNG character card or a JSON file. Cards follow the V2 and V3 specs, so they import straight into <a href="https://roleplaya.com" style="color:var(--pink)">RolePlaya</a> and open in SillyTavern, Chub, RisuAI and most other apps. You can also open an existing card to edit it. Everything happens in your browser; nothing is uploaded.</p>
 
-<label class="drop" id="drop">
-<b>Drop a card here</b> or click to choose a file
-<small>PNG or JSON, V1, V2 or V3</small>
-<input type="file" id="file" accept=".png,.json,image/png,application/json">
-</label>
+<label class="drop" id="drop"><b>Open a card to edit</b> or start writing below<small>PNG or JSON, V1, V2 or V3</small><input type="file" id="cardfile" accept=".png,.json,image/png,application/json"></label>
 <div class="err" id="err"></div>
 
-<div class="card" id="out">
-<div class="head"><img id="pic" alt=""><div><h2 id="name"></h2><div id="chips"></div></div></div>
-<table id="tbl"></table>
-<div class="warn" id="warn"></div>
-<div class="btns">
-<button id="dl2">Download as V2 JSON</button>
-<button id="dl3">Download as V3 JSON</button>
+<div class="panel">
+<h2>Basics</h2>
+<div class="pick">
+<label for="imgfile" style="cursor:pointer"><img id="pic" alt="" style="display:none"><div class="ph" id="ph">Click to add a picture</div></label>
+<input type="file" id="imgfile" accept="image/png,image/jpeg,image/webp">
+<div style="flex:1">
+<label class="f"><span>Name</span><input type="text" id="name"></label>
+<label class="f"><span>Creator</span><input type="text" id="creator"></label>
 </div>
+</div>
+<div class="row">
+<label class="f"><span>Tags <em>comma separated</em></span><input type="text" id="tags"></label>
+<label class="f"><span>Character version</span><input type="text" id="character_version" placeholder="1.0"></label>
+</div>
+</div>
+
+<div class="panel">
+<h2>Character</h2>
+<div class="total" id="total"></div>
+<label class="f"><span>Description <em id="c-description"></em></span><textarea class="big" id="description" placeholder="Who they are, how they look, their history and how they speak."></textarea></label>
+<label class="f"><span>Personality <em id="c-personality"></em></span><textarea id="personality" placeholder="A short summary of their personality."></textarea></label>
+<label class="f"><span>Scenario <em id="c-scenario"></em></span><textarea id="scenario" placeholder="Where the story starts and how you know each other."></textarea></label>
+<label class="f"><span>First message <em id="c-first_mes"></em></span><textarea class="big" id="first_mes" placeholder="The message the character opens with. Use {{user}} for the person chatting and {{char}} for the character."></textarea></label>
+<div id="greets"></div>
+<button class="ghost" id="addg" type="button">Add an alternate greeting</button>
+</div>
+
+<div class="panel">
+<h2>Extras</h2>
+<label class="f"><span>Example dialogue <em id="c-mes_example"></em></span><textarea id="mes_example" placeholder="&lt;START&gt;&#10;{{user}}: Hello.&#10;{{char}}: ..."></textarea></label>
+<label class="f"><span>System prompt <em id="c-system_prompt"></em></span><textarea id="system_prompt"></textarea></label>
+<label class="f"><span>Post history instructions <em id="c-post_history_instructions"></em></span><textarea id="post_history_instructions"></textarea></label>
+<label class="f"><span>Creator notes <em id="c-creator_notes"></em></span><textarea id="creator_notes" placeholder="Notes for people using the card. Not sent to the AI."></textarea></label>
+</div>
+
+<div class="panel">
+<h2>Download</h2>
+<div class="btns">
+<button id="dlpng">PNG card</button>
+<button id="dl2">V2 JSON</button>
+<button id="dl3">V3 JSON</button>
+<button class="ghost" id="clear" type="button">Start a new card</button>
+</div>
+<p class="note">The PNG card carries both V2 and V3 data, the same way SillyTavern saves cards, so older and newer apps can both read it. Lorebooks and extension data from a card you opened are kept. Token counts are estimates; each app counts slightly differently.</p>
+<div class="err" id="err2"></div>
 </div>
 
 <footer>
-Made by <a href="https://roleplaya.com">RolePlaya</a>, the AI roleplay platform for adults, which imports V2 and V3 cards directly. <a href="https://roleplaya.com/blog/import-janitor-chub-sillytavern-cards/">How to import character cards</a>. Make your own card with the <a href="https://roleplayadotcom.github.io/character-card-maker/">Character Card Maker</a>. Open source under the MIT licence.
+Made by <a href="https://roleplaya.com">RolePlaya</a>, the AI roleplay platform for adults, which imports V2 and V3 cards directly. Check a card with the <a href="https://roleplayadotcom.github.io/character-card-checker/">Character Card Checker</a>. <a href="https://roleplaya.com/blog/import-janitor-chub-sillytavern-cards/">How to import character cards</a>. Open source under the MIT licence.
 </footer>
 </main>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i);};
-var data=null,picUrl='';
-var V2KEYS=['name','description','personality','scenario','first_mes','mes_example','creator_notes','system_prompt','post_history_instructions','alternate_greetings','tags','creator','character_version','extensions'];
-function b64dec(s){var bin=atob(s.trim());var bytes=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return new TextDecoder('utf-8').decode(bytes);}
-function readPng(buf){
-  var dv=new DataView(buf),u8=new Uint8Array(buf);
-  var sig=[137,80,78,71,13,10,26,10];for(var i=0;i<8;i++)if(u8[i]!==sig[i])throw new Error('This is not a valid PNG file.');
-  var p=8,found={};
-  while(p<u8.length){
-    var len=dv.getUint32(p),type=String.fromCharCode(u8[p+4],u8[p+5],u8[p+6],u8[p+7]),body=u8.subarray(p+8,p+8+len);
-    if(type==='tEXt'||type==='iTXt'){
-      var z=body.indexOf(0),key=new TextDecoder('latin1').decode(body.subarray(0,z)).toLowerCase(),val;
-      if(type==='tEXt')val=new TextDecoder('latin1').decode(body.subarray(z+1));
-      else{var q=z+3;q=body.indexOf(0,q)+1;q=body.indexOf(0,q)+1;val=new TextDecoder('utf-8').decode(body.subarray(q));}
-      if(key==='chara'||key==='ccv3')found[key]=val;
-    }
-    if(type==='IEND')break;
-    p+=12+len;
-  }
-  var raw=found.ccv3||found.chara;
-  if(!raw)throw new Error('No character data found in this PNG. It may be a plain image, or the data was stripped when it was saved or shared.');
-  return {json:JSON.parse(b64dec(raw)),chunk:found.ccv3?'ccv3':'chara'};
-}
-function normalise(j){
-  var spec=j.spec||'',d=j.data&&typeof j.data==='object'?j.data:j;
-  var ver=spec==='chara_card_v3'?'V3':spec==='chara_card_v2'?'V2':'V1';
-  var f={};V2KEYS.forEach(function(k){f[k]=d[k];});
-  if(ver==='V1'){f.description=d.description||'';f.personality=d.personality||'';f.scenario=d.scenario||'';f.first_mes=d.first_mes||'';f.mes_example=d.mes_example||'';}
-  f.character_book=d.character_book;f.group_only_greetings=d.group_only_greetings;f.nickname=d.nickname;
-  return {ver:ver,d:f};
-}
+var TXT=['name','creator','character_version','description','personality','scenario','first_mes','mes_example','system_prompt','post_history_instructions','creator_notes'];
+var COUNTED=['description','personality','scenario','first_mes','mes_example','system_prompt','post_history_instructions','creator_notes'];
+var keep={},imgBytes=null,picUrl='',KEY='rp-card-maker-draft';
+var CRC=(function(){var t=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc(u8){var c=0xFFFFFFFF;for(var i=0;i<u8.length;i++)c=CRC[(c^u8[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0;}
+function b64enc(s){var u=new TextEncoder().encode(s),bin='';for(var i=0;i<u.length;i+=32768)bin+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(bin);}
+function b64dec(s){var bin=atob(s.trim()),b=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return new TextDecoder('utf-8').decode(b);}
+function chunks(buf){var u8=new Uint8Array(buf),dv=new DataView(u8.buffer,u8.byteOffset,u8.byteLength),sig=[137,80,78,71,13,10,26,10];for(var i=0;i<8;i++)if(u8[i]!==sig[i])throw new Error('This is not a valid PNG file.');var p=8,out=[];while(p<u8.length){var len=dv.getUint32(p),type=String.fromCharCode(u8[p+4],u8[p+5],u8[p+6],u8[p+7]);out.push({type:type,start:p,end:p+12+len,body:u8.subarray(p+8,p+8+len)});if(type==='IEND')break;p+=12+len;}return out;}
+function textKey(c){var z=c.body.indexOf(0);return new TextDecoder('latin1').decode(c.body.subarray(0,z)).toLowerCase();}
+function readCard(buf){var found={};chunks(buf).forEach(function(c){if(c.type!=='tEXt'&&c.type!=='iTXt')return;var k=textKey(c),z=c.body.indexOf(0),v;if(k!=='chara'&&k!=='ccv3')return;if(c.type==='tEXt')v=new TextDecoder('latin1').decode(c.body.subarray(z+1));else{var q=z+3;q=c.body.indexOf(0,q)+1;q=c.body.indexOf(0,q)+1;v=new TextDecoder('utf-8').decode(c.body.subarray(q));}found[k]=v;});var raw=found.ccv3||found.chara;if(!raw)throw new Error('No character data found in this PNG. It may be a plain image, or the data was stripped when it was saved or shared.');return JSON.parse(b64dec(raw));}
+function textChunk(key,val){var k=new TextEncoder().encode(key),v=new TextEncoder().encode(val),body=new Uint8Array(k.length+1+v.length);body.set(k,0);body.set(v,k.length+1);var td=new Uint8Array(4+body.length);td.set([116,69,88,116],0);td.set(body,4);var out=new Uint8Array(12+body.length),dv=new DataView(out.buffer);dv.setUint32(0,body.length);out.set(td,4);dv.setUint32(8+body.length,crc(td));return out;}
+function writeCard(png,v2,v3){var cs=chunks(png),u8=new Uint8Array(png),parts=[u8.subarray(0,8)];cs.forEach(function(c){if((c.type==='tEXt'||c.type==='iTXt'||c.type==='zTXt')&&['chara','ccv3'].indexOf(textKey(c))>-1)return;if(c.type==='IEND'){parts.push(textChunk('chara',b64enc(JSON.stringify(v2))));parts.push(textChunk('ccv3',b64enc(JSON.stringify(v3))));}parts.push(u8.subarray(c.start,c.end));});return new Blob(parts,{type:'image/png'});}
 function words(s){return s?String(s).trim().split(/\s+/).filter(Boolean).length:0;}
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
-function show(n,src){
-  var d=n.d;data=n;
-  $('name').textContent=d.name||'Unnamed character';
-  $('chips').innerHTML='<span class="chip">'+n.ver+' card</span><span class="chip">'+esc(src)+'</span>';
-  $('pic').style.display=picUrl?'':'none';if(picUrl)$('pic').src=picUrl;
-  var book=d.character_book&&Array.isArray(d.character_book.entries)?d.character_book.entries.length:0;
-  var rows=[['Creator',d.creator||'Not set'],['Description',words(d.description)+' words'],['Personality',words(d.personality)+' words'],['Scenario',words(d.scenario)+' words'],['First message',words(d.first_mes)+' words'],['Alternate greetings',(d.alternate_greetings||[]).length],['Example dialogue',words(d.mes_example)+' words'],['Tags',(d.tags||[]).length?esc((d.tags||[]).join(', ')):'None'],['Lorebook entries',book],['System prompt',d.system_prompt?'Set':'Not set'],['Version',d.character_version||'Not set']];
-  $('tbl').innerHTML=rows.map(function(r){return'<tr><td>'+r[0]+'</td><td>'+(typeof r[1]==='number'?r[1]:r[1])+'</td></tr>';}).join('');
-  var w=[];
-  if(!d.name)w.push('No name. Most apps will refuse to import it.');
-  if(!d.first_mes)w.push('No first message. The character will not open the conversation.');
-  if(words(d.description)<40)w.push('Very short description. Characters with under about 40 words tend to feel flat.');
-  if(words(d.description)>1500)w.push('Very long description. Some apps cut anything past their field limit.');
-  if(n.ver==='V1')w.push('This is an old V1 card. Download it as V2 or V3 for the best compatibility.');
-  if(!(d.tags||[]).length)w.push('No tags. Adding a few helps people find the character.');
-  $('warn').innerHTML=w.length?'<b>Things to check</b><ul>'+w.map(function(x){return'<li>'+x+'</li>';}).join('')+'</ul>':'<b>Looks good.</b> All the main fields are filled in.';
-  $('out').style.display='block';$('err').textContent='';
-}
-function build(v){
-  var d=data.d,o={};V2KEYS.forEach(function(k){o[k]=d[k]!==undefined?d[k]:(k==='alternate_greetings'||k==='tags'?[]:k==='extensions'?{}:'');});
-  if(d.character_book)o.character_book=d.character_book;
-  if(v===3){o.group_only_greetings=d.group_only_greetings||[];if(d.nickname)o.nickname=d.nickname;return{spec:'chara_card_v3',spec_version:'3.0',data:o};}
-  return{spec:'chara_card_v2',spec_version:'2.0',data:o};
-}
-function save(v){if(!data)return;var b=new Blob([JSON.stringify(build(v),null,2)],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=((data.d.name||'character').replace(/[^\w\- ]+/g,'').trim()||'character')+'.v'+v+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},2000);}
-function load(file){
-  if(!file)return;picUrl='';
-  var r=new FileReader();
-  r.onload=function(){
-    try{
-      if(/\.json$/i.test(file.name)||file.type==='application/json'){show(normalise(JSON.parse(new TextDecoder('utf-8').decode(r.result))),'JSON file');}
-      else{var res=readPng(r.result);picUrl=URL.createObjectURL(file);show(normalise(res.json),'PNG, '+res.chunk+' chunk');}
-    }catch(e){$('out').style.display='none';$('err').textContent=e.message||'Could not read this file.';}
-  };
-  r.readAsArrayBuffer(file);
-}
-$('file').addEventListener('change',function(e){load(e.target.files[0]);});
-var dz=$('drop');
-['dragenter','dragover'].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.add('on');});});
-['dragleave','drop'].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.remove('on');});});
-dz.addEventListener('drop',function(e){load(e.dataTransfer.files[0]);});
-$('dl2').addEventListener('click',function(){save(2);});
-$('dl3').addEventListener('click',function(){save(3);});
+function toks(s){return s?Math.ceil(String(s).length/4):0;}
+function greetVals(){return Array.prototype.map.call(document.querySelectorAll('#greets textarea'),function(t){return t.value;}).filter(function(s){return s.trim();});}
+function addGreet(val){var n=document.querySelectorAll('#greets .greet').length+1,w=document.createElement('label');w.className='f greet';w.innerHTML='<span>Alternate greeting '+n+'</span><textarea></textarea><button class="x" type="button">Remove</button>';w.querySelector('textarea').value=val||'';w.querySelector('button').addEventListener('click',function(e){e.preventDefault();w.remove();renum();count();});w.querySelector('textarea').addEventListener('input',count);$('greets').appendChild(w);}
+function renum(){Array.prototype.forEach.call(document.querySelectorAll('#greets .greet span'),function(s,i){s.textContent='Alternate greeting '+(i+1);});}
+function count(){var t=0;COUNTED.forEach(function(k){var v=$(k).value;$('c-'+k).textContent=v?words(v)+' words, about '+toks(v)+' tokens':'';if(k!=='creator_notes')t+=toks(v);});greetVals().forEach(function(g){t+=toks(g);});$('total').textContent='About '+t+' tokens in total across the fields the AI reads.';saveDraft();}
+function fields(){var d={};TXT.forEach(function(k){d[k]=$(k).value;});d.tags=$('tags').value.split(',').map(function(s){return s.trim();}).filter(Boolean);d.alternate_greetings=greetVals();d.extensions=keep.extensions||{};if(keep.character_book)d.character_book=keep.character_book;return d;}
+function v2(){return{spec:'chara_card_v2',spec_version:'2.0',data:fields()};}
+function v3(){var d=fields();d.group_only_greetings=keep.group_only_greetings||[];if(keep.nickname)d.nickname=keep.nickname;if(keep.assets)d.assets=keep.assets;return{spec:'chara_card_v3',spec_version:'3.0',data:d};}
+function fill(j){var d=j.data&&typeof j.data==='object'?j.data:j;keep={extensions:d.extensions,character_book:d.character_book,group_only_greetings:d.group_only_greetings,nickname:d.nickname,assets:d.assets};TXT.forEach(function(k){$(k).value=d[k]||'';});$('tags').value=(d.tags||[]).join(', ');$('greets').innerHTML='';(d.alternate_greetings||[]).forEach(addGreet);count();}
+function setPic(bytes,url){imgBytes=bytes;if(picUrl)URL.revokeObjectURL(picUrl);picUrl=url;$('pic').src=url;$('pic').style.display='';$('ph').style.display='none';}
+function toPng(file,cb){var url=URL.createObjectURL(file),im=new Image();im.onload=function(){var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext('2d').drawImage(im,0,0);URL.revokeObjectURL(url);c.toBlob(function(b){b.arrayBuffer().then(function(ab){cb(ab,URL.createObjectURL(b));});},'image/png');};im.onerror=function(){$('err').textContent='That image could not be read.';};im.src=url;}
+function fname(){return($('name').value.replace(/[^\w\- ]+/g,'').trim()||'character');}
+function dl(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(a.href);},2000);}
+function blankPng(cb){var c=document.createElement('canvas');c.width=400;c.height=600;var x=c.getContext('2d');x.fillStyle='#0f0f0f';x.fillRect(0,0,400,600);x.fillStyle='#ff41b4';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText($('name').value||'Character',200,310);c.toBlob(function(b){b.arrayBuffer().then(cb);},'image/png');}
+function saveDraft(){try{localStorage.setItem(KEY,JSON.stringify(v3()));}catch(e){}}
+$('cardfile').addEventListener('change',function(e){openCard(e.target.files[0]);});
+function openCard(file){if(!file)return;var r=new FileReader();r.onload=function(){try{if(/\.json$/i.test(file.name)||file.type==='application/json'){fill(JSON.parse(new TextDecoder('utf-8').decode(r.result)));}else{fill(readCard(r.result));setPic(r.result,URL.createObjectURL(file));}$('err').textContent='';}catch(e){$('err').textContent=e.message||'Could not read this file.';}};r.readAsArrayBuffer(file);}
+var dz=$('drop');['dragenter','dragover'].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.add('on');});});['dragleave','drop'].forEach(function(t){dz.addEventListener(t,function(e){e.preventDefault();dz.classList.remove('on');});});dz.addEventListener('drop',function(e){openCard(e.dataTransfer.files[0]);});
+$('imgfile').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;if(f.type==='image/png'){f.arrayBuffer().then(function(ab){try{chunks(ab);setPic(ab,URL.createObjectURL(f));}catch(x){toPng(f,setPic);}});}else toPng(f,setPic);});
+$('addg').addEventListener('click',function(){addGreet('');});
+TXT.concat(['tags']).forEach(function(k){$(k).addEventListener('input',count);});
+$('dl2').addEventListener('click',function(){dl(new Blob([JSON.stringify(v2(),null,2)],{type:'application/json'}),fname()+'.v2.json');});
+$('dl3').addEventListener('click',function(){dl(new Blob([JSON.stringify(v3(),null,2)],{type:'application/json'}),fname()+'.v3.json');});
+$('dlpng').addEventListener('click',function(){$('err2').textContent='';if(!$('name').value.trim()){$('err2').textContent='Give the character a name first.';return;}var go=function(png){try{dl(writeCard(png,v2(),v3()),fname()+'.png');}catch(e){$('err2').textContent=e.message;}};if(imgBytes)go(imgBytes);else blankPng(go);});
+$('clear').addEventListener('click',function(){keep={};TXT.forEach(function(k){$(k).value='';});$('tags').value='';$('greets').innerHTML='';imgBytes=null;$('pic').style.display='none';$('ph').style.display='';count();});
+try{var s=localStorage.getItem(KEY);if(s)fill(JSON.parse(s));}catch(e){}
+count();
 })();
 </script>
 </body>
